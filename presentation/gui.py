@@ -1,4 +1,5 @@
 import customtkinter as ctk
+import tkinter as tk
 from decimal import Decimal, InvalidOperation
 from datetime import date
 from typing import Optional
@@ -85,33 +86,45 @@ class App(ctk.CTk):
     def _apply_auto_contrast(self, parent):
         # Reaplica uma paleta de alto contraste sem alterar os dados ou a lógica.
         palette = {
-            "#1E1E2E": "#000000",
+            "#1e1e2e": "#000000",
             "#181825": "#080808",
-            "#2A2A3C": "#181818",
+            "#2a2a3c": "#181818",
             "#313244": "#252525",
-            "#45475A": "#777777",
-            "#3B3B52": "#555555",
-            "#144A75": "#003B70",
-            "#1F6AA5": "#005FCC",
-            "#89DCEB": "#00FFFF",
-            "#A6ADC8": "#E8E8E8",
-            "#BAC2DE": "#FFFFFF",
-            "#CDD6F4": "#FFFFFF",
-            "#FFFFFF": "#FFFFFF",
-            "#A6E3A1": "#00FF66",
-            "#F38BA8": "#FF6666",
-            "#F9E2AF": "#FFFF00",
+            "#45475a": "#777777",
+            "#3b3b52": "#555555",
+            "#144a75": "#003b70",
+            "#1f6aa5": "#005fcc",
+            "#89dceb": "#00ffff",
+            "#a6adc8": "#e8e8e8",
+            "#bac2de": "#ffffff",
+            "#cdd6f4": "#ffffff",
+            "#ffffff": "#ffffff",
+            "#a6e3a1": "#00ff66",
+            "#f38ba8": "#ff6666",
+            "#f9e2af": "#ffff00",
         }
-        normalized_palette = {key.lower(): value for key, value in palette.items()}
+        color_options = (
+            "fg_color", "text_color", "border_color", "hover_color",
+            "placeholder_text_color", "button_color", "button_hover_color",
+        )
+
         for widget in parent.winfo_children():
-            try:
-                for option in ("fg_color", "text_color", "border_color", "hover_color",
-                               "placeholder_text_color", "button_color", "button_hover_color"):
+            # Nem todo widget do CustomTkinter/Tk suporta todas as opções.
+            # Uma opção inválida deve ser ignorada sem interromper as demais.
+            for option in color_options:
+                try:
                     current = widget.cget(option)
-                    if isinstance(current, str) and current.lower() in normalized_palette:
-                        widget.configure(**{option: normalized_palette[current.lower()]})
-            except (KeyError, TypeError, ValueError):
-                pass
+                except (tk.TclError, KeyError, TypeError, ValueError):
+                    continue
+
+                if isinstance(current, str):
+                    replacement = palette.get(current.lower())
+                    if replacement:
+                        try:
+                            widget.configure(**{option: replacement})
+                        except (tk.TclError, KeyError, TypeError, ValueError):
+                            pass
+
             self._apply_auto_contrast(widget)
 
     def _setup_main_container(self):
