@@ -102,13 +102,14 @@ class App(ctk.CTk):
             "#F38BA8": "#FF6666",
             "#F9E2AF": "#FFFF00",
         }
+        normalized_palette = {key.lower(): value for key, value in palette.items()}
         for widget in parent.winfo_children():
             try:
                 for option in ("fg_color", "text_color", "border_color", "hover_color",
                                "placeholder_text_color", "button_color", "button_hover_color"):
                     current = widget.cget(option)
-                    if isinstance(current, str) and current.lower() in palette:
-                        widget.configure(**{option: palette[current.lower()]})
+                    if isinstance(current, str) and current.lower() in normalized_palette:
+                        widget.configure(**{option: normalized_palette[current.lower()]})
             except (KeyError, TypeError, ValueError):
                 pass
             self._apply_auto_contrast(widget)
@@ -233,6 +234,9 @@ class App(ctk.CTk):
         if not self.selected_contract and contratos:
             p42 = next((c for c in contratos if c.numero_processo == '2026/042'), contratos[0])
             self._selecionar_contrato(p42)
+
+        if self.auto_contrast:
+            self._apply_auto_contrast(self.rows_container)
 
     def _selecionar_contrato(self, contrato: ContratoModel):
         self.selected_contract = contrato
