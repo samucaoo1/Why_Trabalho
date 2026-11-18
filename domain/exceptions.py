@@ -6,7 +6,7 @@ class SaldoContratualInsuficienteException(Exception):
         self.valor_fatura = valor_fatura
         self.excedente = valor_fatura - saldo_disponivel
         super().__init__(
-            f"Operação Bloqueada: Valor da fatura (R$ {valor_fatura:,.2f}) excede o saldo remanescente disponível (R$ {saldo_disponivel:,.2f}). Excedente: R$ {self.excedente:,.2f}."
+            f"Operação Bloqueada: Valor da fatura (R$ {valor_fatura:,.2f}) excede o saldo remanescente disponível (R$ {saldo_disponivel:,.3f}). Excedente: R$ {self.excedente:,.2f}."
         )
 
 class ChecklistInvalidoException(Exception):
