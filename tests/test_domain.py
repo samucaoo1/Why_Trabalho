@@ -55,7 +55,7 @@ def test_atesto_sucesso_com_amortizacao_saldo():
 
     fatura = NotaFiscalModel(
         id_contrato=1,
-        numero_nf="000.143",
+        numero_nf="55143/23",
         data_emissao=date(2026, 11, 10),
         data_recebimento=date(2026, 11, 14),
         valor_bruto=Decimal("8000.00"),
