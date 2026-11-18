@@ -8,7 +8,7 @@ from domain.services import GestaoContratosService
 class MockRepository:
     def __init__(self):
         self.contrato = ContratoModel(
-            id_contrato=1,
+            id_contrato=3,
             numero_processo="2026/042",
             objeto="Serviços de Limpeza",
             razao_social_fornecedor="LimpServ",
