@@ -21,6 +21,7 @@ class App(ctk.CTk):
 
         self.contratos_cache = []
         self.selected_contract: Optional[ContratoModel] = None
+        self.auto_contrast = False
 
         self._setup_topbar()
         self._setup_main_container()
@@ -42,6 +43,18 @@ class App(ctk.CTk):
         )
         title_lbl.pack(side="left", padx=24)
 
+        self.btn_contraste = ctk.CTkButton(
+            topbar,
+            text="Alto contraste: desligado",
+            height=36,
+            fg_color="#313244",
+            hover_color="#45475A",
+            text_color="#CDD6F4",
+            font=ctk.CTkFont(family="Segoe UI", size=12, weight="bold"),
+            command=self._toggle_auto_contrast
+        )
+        self.btn_contraste.pack(side="right", padx=8)
+
         btn_sair = ctk.CTkButton(
             topbar,
             text="Sair [Alt+S]",
@@ -61,6 +74,44 @@ class App(ctk.CTk):
             text_color="#BAC2DE"
         )
         user_badge.pack(side="right", padx=12)
+
+    def _toggle_auto_contrast(self):
+        self.auto_contrast = not self.auto_contrast
+        self.btn_contraste.configure(
+            text="Alto contraste: ligado" if self.auto_contrast else "Alto contraste: desligado"
+        )
+        self._apply_auto_contrast(self)
+
+    def _apply_auto_contrast(self, parent):
+        # Reaplica uma paleta de alto contraste sem alterar os dados ou a lógica.
+        palette = {
+            "#1E1E2E": "#000000",
+            "#181825": "#080808",
+            "#2A2A3C": "#181818",
+            "#313244": "#252525",
+            "#45475A": "#777777",
+            "#3B3B52": "#555555",
+            "#144A75": "#003B70",
+            "#1F6AA5": "#005FCC",
+            "#89DCEB": "#00FFFF",
+            "#A6ADC8": "#E8E8E8",
+            "#BAC2DE": "#FFFFFF",
+            "#CDD6F4": "#FFFFFF",
+            "#FFFFFF": "#FFFFFF",
+            "#A6E3A1": "#00FF66",
+            "#F38BA8": "#FF6666",
+            "#F9E2AF": "#FFFF00",
+        }
+        for widget in parent.winfo_children():
+            try:
+                for option in ("fg_color", "text_color", "border_color", "hover_color",
+                               "placeholder_text_color", "button_color", "button_hover_color"):
+                    current = widget.cget(option)
+                    if isinstance(current, str) and current.lower() in palette:
+                        widget.configure(**{option: palette[current.lower()]})
+            except (KeyError, TypeError, ValueError):
+                pass
+            self._apply_auto_contrast(widget)
 
     def _setup_main_container(self):
         self.content_frame = ctk.CTkFrame(self, fg_color="transparent")
@@ -129,6 +180,8 @@ class App(ctk.CTk):
         self.btn_lancar.pack(side="right")
 
         self.bind("<Return>", lambda e: self._acao_lancar_fatura())
+        if self.auto_contrast:
+            self._apply_auto_contrast(self)
 
     def _render_rows(self, contratos):
         for w in self.rows_container.winfo_children():
@@ -311,6 +364,8 @@ class App(ctk.CTk):
 
         self.bind("<Return>", lambda e: self._submeter_fatura(contrato))
         self.bind("<Escape>", lambda e: self.mostrar_dashboard())
+        if self.auto_contrast:
+            self._apply_auto_contrast(self)
 
     def _submeter_fatura(self, contrato: ContratoModel):
         try:
@@ -401,6 +456,8 @@ class App(ctk.CTk):
 
         modal.bind("<Escape>", lambda e: modal.destroy())
         modal.bind("<Return>", lambda e: modal.destroy())
+        if self.auto_contrast:
+            self._apply_auto_contrast(modal)
 
     def _mostrar_modal_sucesso(self, contrato: ContratoModel, valor_faturado: Decimal):
         modal = ctk.CTkToplevel(self)
@@ -441,6 +498,8 @@ class App(ctk.CTk):
 
         modal.bind("<Return>", lambda e: fechar())
         modal.bind("<Escape>", lambda e: fechar())
+        if self.auto_contrast:
+            self._apply_auto_contrast(modal)
 
     def _mostrar_alerta_generico(self, titulo: str, msg: str):
         modal = ctk.CTkToplevel(self)
@@ -455,3 +514,5 @@ class App(ctk.CTk):
         ctk.CTkLabel(inner, text=titulo, font=ctk.CTkFont(size=14, weight="bold"), text_color="#F9E2AF").pack(pady=(12, 8))
         ctk.CTkLabel(inner, text=msg, wraplength=400, text_color="#CDD6F4").pack(pady=8)
         ctk.CTkButton(inner, text="OK", width=120, height=36, command=modal.destroy).pack(pady=12)
+        if self.auto_contrast:
+            self._apply_auto_contrast(modal)
