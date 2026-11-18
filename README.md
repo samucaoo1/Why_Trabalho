@@ -2,7 +2,7 @@
 
 Aplicação desktop nativa desenvolvida para a fiscalização físico-financeira de contratos de serviços continuados da **Câmara Municipal de Barão de Cocais (MG)**, garantindo conformidade com a **Lei nº 14.133/2021** e as diretrizes do Tribunal de Contas (TCE-MG).
 
-## 🚀 Arquitetura e Tecnologias
+## Arquitetura e Tecnologias
 - **Arquitetura:** Monólito em 3 Camadas (Apresentação, Regras de Negócio, Persistência Local).
 - **Linguagem & Runtime:** Python 3.12 (CPython).
 - **Interface Gráfica (GUI):** CustomTkinter (tema escuro de alto contraste, foco em produtividade via teclado numérico e atalhos).
