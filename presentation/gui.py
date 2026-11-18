@@ -376,8 +376,7 @@ class App(ctk.CTk):
 
         lbl_desc = ctk.CTkLabel(
             inner,
-            text="O valor da nota fiscal excede o saldo contratual disponível.
-Operação cancelada para resguardo do erário público.",
+            text="O valor da nota fiscal excede o saldo contratual disponível.\nOperação cancelada para resguardo do erário público.",
             font=ctk.CTkFont(size=12),
             text_color="#BAC2DE"
         )
