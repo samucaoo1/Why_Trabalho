@@ -136,20 +136,19 @@ class App(ctk.CTk):
 
         self.row_widgets = []
         for c in contratos:
-            row = ctk.CTkButton(
+            row = ctk.CTkFrame(
                 self.rows_container,
-                text="",
                 height=48,
-                fg_color="#2A2A3C",
-                hover_color="#3B3B52",
+                fg_color="#313244" if (self.selected_contract and self.selected_contract.id_contrato == c.id_contrato) else "#2A2A3C",
                 border_width=2 if (self.selected_contract and self.selected_contract.id_contrato == c.id_contrato) else 0,
                 border_color="#1F6AA5",
-                corner_radius=6,
-                command=lambda item=c: self._selecionar_contrato(item)
+                corner_radius=6
             )
             row.pack(fill="x", padx=4, pady=4)
+            row.pack_propagate(False)
 
-            # Conteúdo da linha
+            # Conteúdo da linha; o frame permite organizar os campos sem
+            # conflitar com o gerenciador interno de geometria do CTkButton.
             lbl_proc = ctk.CTkLabel(row, text=c.numero_processo, width=120, anchor="w", font=ctk.CTkFont(weight="bold"))
             lbl_proc.pack(side="left", padx=8)
 
@@ -168,6 +167,12 @@ class App(ctk.CTk):
             status_color = "#A6E3A1" if c.status == "Ativo" else "#F38BA8"
             lbl_status = ctk.CTkLabel(row, text=c.status, width=100, anchor="e", text_color=status_color)
             lbl_status.pack(side="left", padx=8)
+
+            # Mantém a seleção acessível clicando em qualquer ponto da linha.
+            selecionar = lambda event, item=c: self._selecionar_contrato(item)
+            row.bind("<Button-1>", selecionar)
+            for label in (lbl_proc, lbl_forn, lbl_obj, lbl_global, lbl_saldo, lbl_status):
+                label.bind("<Button-1>", selecionar)
 
             self.row_widgets.append((c, row))
 
