@@ -1,0 +1,12 @@
+app:
+  name: "why - Gestão de Contratos e Faturas"
+  version: "1.0.0"
+  organization: "Câmara Municipal de Barão de Cocais"
+database:
+  filename: "why_database.db"
+  timeout_ms: 5000
+ui:
+  theme: "dark"
+  accent_color: "#1F6AA5"
+  bg_color: "#1E1E2E"
+  card_color: "#2A2A3C"
