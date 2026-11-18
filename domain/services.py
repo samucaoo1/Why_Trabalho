@@ -24,7 +24,7 @@ class GestaoContratosService:
         if contrato.status != 'Ativo':
             raise ValueError("Não é permitido lançar notas para contratos que não estejam ativos.")
 
-        # Trava impeditiva de saldo
+        # Trava impeditiva de saldo disponivel
         if fatura.valor_bruto > contrato.saldo_remanescente_atual:
             raise SaldoContratualInsuficienteException(
                 saldo_disponivel=contrato.saldo_remanescente_atual,
